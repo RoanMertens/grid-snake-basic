@@ -1,1 +1,61 @@
 // Specific CSS for your home-page
+html{
+  height: 100%;
+}
+
+body{
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: gray;
+  position: relative;
+}
+
+#field{
+  height: 80vh;
+  width: 80vh;
+}
+
+@media (orientation:portrait) {
+  #field{
+    height: 80vw;
+    width: 80vw;
+  }
+}
+
+#field{
+  background: #6d3636;
+  position: absolute;
+  top:0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  display: grid;
+  grid-gap: 1%;
+}
+
+.snake{
+  background: #fee476;
+  border-radius: 10%;
+}
+
+.candy{
+  background: red;
+  border-radius: 50%;
+}
+
+.candy-snake{
+  background: #e57a49;
+  border-radius: 10%;
+}
+
+
+
+
+
+
+
+
+
+
