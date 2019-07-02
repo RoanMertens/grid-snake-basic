@@ -280,9 +280,14 @@ const game = setInterval(function() {
   params = moveSnake(snake_body, snake_current_direction, game_field_size);
   snake_body = params.snake_body;
   candies_eaten = candies_eaten + params.candies_eaten;
+  document.getElementById('amount-candies').innerText = candies_eaten;
   let snake_collision = checkSnakeCollision(snake_body);
   if (snake_collision === true && params.growing_up === false) {
     clearInterval(game);
     emptyGrid(snake_body);
   }
 }, calcDelay(game_difficulty, candies_eaten));
+
+
+
+
