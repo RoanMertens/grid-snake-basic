@@ -224,18 +224,21 @@ function checkSnakeCollision(snake_body){
 
 function emptyGrid(snake_body){
   snake_body.forEach(function(i) {
-    console.log(i);
-    setTimeout(function(){
-      removeSnakeTail(i);
-      snakeStepDelay();
-    }, 500);
+    // setTimeout(function(){
+      console.log(snake_body);
+      removeSnakeTail(snake_body);
+      // snakeStepDelay();
+    // }, 500);
 
     // wait three seconds function
-    function snakeStepDelay(){
-      var ms = 3000 + new Date().getTime();
-      while (new Date() < ms){}
-    }
+    // function snakeStepDelay(){
+    //   var ms = 300 + new Date().getTime();
+    //   while (new Date() < ms){}
+    // }
   });
+  removeSnakeTail(snake_body);
+  removeSnakeTail(snake_body);
+  removeSnakeTail(snake_body);
 }
 
 // <<<<<<<<<<<................>>>>>>>>>>
@@ -245,48 +248,70 @@ function emptyGrid(snake_body){
 // ................
 // css info
 // ................
-const elem = document.getElementById("field");
+let elem = document.getElementById("field");
 
 // ................
 // static'ish' game info
 // ................
 // let game_running = false;
 let game_difficulty = 4; //easy1 || medium2 || hard3 || hell4
-const game_field_size = { height:10 , width:10 };
+let game_field_size = { height:10 , width:10 };
 
 // ................
 //  dynamic info
 // ................
-const game_field_css = calculateGrid(game_field_size, "css");
-const game_field_array = calculateGrid(game_field_size, "array");
+let game_field_css = calculateGrid(game_field_size, "css");
+let game_field_array = calculateGrid(game_field_size, "array");
 // let snake_body_size = 3 // grows by eating candies
 // let snake_distance_moved = 0 //begint op nul (telt een op met elke loop)
 let snake_current_direction = 'right'
 let candies_eaten = 0 //starts at 0 and adds one as the snake eats candies
 
 // create array active elements
-const game_field = displayGrid(game_field_array, game_field_css, game_field_size, elem);
+let game_field = displayGrid(game_field_array, game_field_css, game_field_size, elem);
 
 // ................
 //  snake info
 // ................
-const snake_start_location = calcSnakeStartLocation(game_field_size) // (middle field)
+let snake_start_location = calcSnakeStartLocation(game_field_size) // (middle field)
 // get active elements from array and create snake body
 let snake_body = createSnake(snake_start_location, game_field);
 
 createCandy(game_field, snake_body);
 
-const game = setInterval(function() {
+let button = document.getElementById("reset-button-snake");
+button.addEventListener('click', function() {
+  button.style.display = "none";
+  candies_eaten = 0
+  snake_current_direction = 'right'
+  snake_start_location = calcSnakeStartLocation(game_field_size);
+  snake_body = createSnake(snake_start_location, game_field);
+
+  setNewTimer(game_difficulty, 0);
+})
+
+function runningGame(){
   params = moveSnake(snake_body, snake_current_direction, game_field_size);
   snake_body = params.snake_body;
   candies_eaten = candies_eaten + params.candies_eaten;
   document.getElementById('amount-candies').innerText = candies_eaten;
   let snake_collision = checkSnakeCollision(snake_body);
+  if (params.candies_eaten) {
+    setNewTimer(game_difficulty, candies_eaten);
+  }
   if (snake_collision === true && params.growing_up === false) {
     clearInterval(game);
     emptyGrid(snake_body);
+    document.getElementById('reset-button-snake').style.display = "block";
   }
-}, calcDelay(game_difficulty, candies_eaten));
+}
+
+function setNewTimer(game_difficulty, candies_eaten){
+  clearInterval(game);
+  game = setInterval(runningGame, calcDelay(game_difficulty, candies_eaten));
+}
+
+let game;
 
 
 
